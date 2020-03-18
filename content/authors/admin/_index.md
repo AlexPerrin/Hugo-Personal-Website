@@ -24,7 +24,7 @@ interests:
 - Network Engineering
 - Server Administration
 - All Things Linux
-- Fortnite Professional
+- Data Science and GIS
 
 education:
   courses:

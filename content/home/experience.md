@@ -25,12 +25,6 @@ date_format = "Jan 2006"
   location = ""
   date_start = "2019-09-01"
   date_end = ""
-  description = """
-  * Manage EngSoc servers and web applications.
-  * Develop EngSoc Dash, the internal hiring system using Ruby on Rails.
-  * Maintenece of Wordpress sites and PostgreSQL databases.
-  * Apply knowladge of Network Secuirity to mitigate Linux Server attacks and ensure data privacy of private information.
-  """
 
 [[experience]]
   title = "Repair Technician"
@@ -39,9 +33,6 @@ date_format = "Jan 2006"
   location = ""
   date_start = "2019-08-01"
   date_end = ""
-  description = """
-  * Operated and managed the uBreakiFix Queen's Location 
-  """
 
 [[experience]]
   title = "Network Infrastructure Engineering Co-op"
@@ -50,11 +41,6 @@ date_format = "Jan 2006"
   location = ""
   date_start = "2018-05-01"
   date_end = "2018-09-01"
-  description = """
-  * CCNA/CCNP Trained
-  * Performed IMACs of Cisco switches, routers, and firewalls
-  * Presented reports to Network Engineers on recomendations for network upgrades and maintenance.
-  """
 
   [[experience]]
   title = "Queen's Network Secuirity Team"
@@ -63,8 +49,5 @@ date_format = "Jan 2006"
   location = ""
   date_start = "2017-09-01"
   date_end = ""
-  description = """
-  * Competed with the team at the Royal Military Collage of Kingston in the Cyber Defense Exercise (CDX) competitioncollaboratingmy technical network skills to score points in a CTF style hacking game.
-  """
 
 +++
