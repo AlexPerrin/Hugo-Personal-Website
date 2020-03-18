@@ -28,7 +28,7 @@ interests:
 
 education:
   courses:
-  - course: BASc in Computer Egnineering
+  - course: BASc in Computer Engineering
     institution: Queen's University
     year: 2021
 
