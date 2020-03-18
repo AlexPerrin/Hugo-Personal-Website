@@ -8,66 +8,53 @@ date: "2020-01-27T00:00:00Z"
 image:
   focal_point: Smart
 ---
-
-# Google Maps Visualization
-
 This summer while travelling I discovered the Google Timeline, a history of your location recorded by your phone's GPS. While it would show you individual days, your routes, and points of interest on Google Maps, I wanted to see everywhere I've been on the face of this earth up to this point. Using Google's takeout feature, you can actually export your location history which is what were going to be using for our data visualization. This project introduced my to GIS software, I tried using ArcGIS as this is the most commonly used software used for spatial analysis. While trying to learn ArcGIS as I go, I ran into some issues which required me to switch to something I'm more comfortable with for certain tasks, which is Python scripting. This is how I did it
-
-
 
 ### Download your Location History using Google Takeout
 
 Google Takeout can be found [here](https://takeout.google.com/settings/takeout ). It takes about 12 hours for Google to process your request until they send your takeout through email. You can download only your location history if you've accumulated a large amount of data. Your location history will be JSON formation
 
-![Capture](/static/img/Capture.PNG)
-
-
+![](/img/Capture.PNG)
 
 ### Converting Location History JSON into GIS Shapefiles
 
 The JSON format of our data seems to be in a format only readable by Google Maps. In order to read your data into ArcGIS it must be converted into shapefiles (.shp). For this I found a python script  on Github called [android_location_converter](https://github.com/iboates/android_location_converter)
 
-![](/static/img/Capture2.PNG)Our data is a series of points with a longitude, latitude, and timestamp. For me there was about 1,500,000+ points along Eastern Ontario from Toronto to Montreal, with most of the points being in my hometown Kingston.
+![](/img/Capture2.PNG)Our data is a series of points with a longitude, latitude, and timestamp. For me there was about 1,500,000+ points along Eastern Ontario from Toronto to Montreal, with most of the points being in my hometown Kingston.
 
 ### Reducing the Data
 
 So even with my own desktop with a fancy CPU and GPU, this amount of data turned ArcGIS into a slideshow, which gets old very quick while trying to learn to use the software. I decided to reduce the data to only points within Kingston for my sanity. I've also gone ahead and downloaded Shapefiles for the map of Kingston, conveniently provided to the public on the [City of Kingston website](https://opendatakingston.cityofkingston.ca/explore/dataset/road-segments/information/?disjunctive.orn_class&disjunctive.gis_class)
 
-![Capture1](/static/img/Capture1.PNG)
+![](/img/Capture1.PNG)
 
 We can see the map of Kingston, our location history, a boundary I created to include only the points within.
 
-![](/static/img/Capture4.PNG)
+![](/img/Capture4.PNG)
 
 Still over 1,000,000 points but still much better.
-
-
 
 ### First attempting at created Routes
 
 In an attempt to make a path similar to what is seen in the Google Timeline I decided to connect each point in a line based of off date. This was an absolute mess.
 
-![](/static/img/Capture5.PNG)
+![](/img/Capture5.PNG)
 
 The line join feature is unaware of the underlying map layer and joins the points in straight lines. I originally thought this may be due to our GPS not fitting to the roads due inaccuracy so I tried snapping each point to the lines on the map layer
 
-![](/static/img/Capture3.PNG)While this did clean up the map a little, the resulting lines were almost identical to the previously generated mess.
-
-
+![](/img/Capture3.PNG)While this did clean up the map a little, the resulting lines were almost identical to the previously generated mess.
 
 ### Attempting to create routes using ArcGIS's Network Analysts Plugin
 
 So the version of ArcGIS provided by my school includes all of the licensed ArcGIS plugins including a routing engine found in the Network Analyst plugin. The idea was to create a route for each unique date, in the order of time for each point. First we have to convert out map layer into a Network Model which is a series of edges and nodes or in this case streets and intersections.
 
-![](/static/img/Capture8.PNG)
+![](/img/Capture8.PNG)
 
 Using the Network analysist plugin I found no way to created routes based off of date or at least not without doing it manually one by one for each of the 1000+ days of routes. My next attempt was to used ArcMaps Model Builder, this tools lets you string together different geoprocessing tools inputs and outputs to automate the processing of data. I tried to do it iteratively for each of the routes.
 
-![](/static/img/Capture10.PNG) 
+![](/img/Capture10.PNG) 
 
 After spending a day trying to get the model to work I gave up. After doing some research on Reddit a simpler and more powerful option is Python scripting within ArcMaps. You can either control your current ArcMaps session with a python terminal or you can use all of the ArcGIS functionality with their APIs and Python plugin ArcPy.
-
-
 
 ### Creating Routes using Python
 
@@ -107,8 +94,6 @@ dupes = coordinates[coordinates.duplicated('Date', keep = False)]
 #export to csv
 dupes.to_csv (r'export_dataframe_250m.csv', index = False, header = True)
 ```
-
-
 
 ##### (2) Calling the GraphHopper API
 
@@ -161,25 +146,21 @@ for i in range(len(coordinates)-1):
         address = point + str(round(coordinates.loc[i, 'Latitude'],8)) + separator + str(round(coordinates.loc[i, 'Longitude'], 8)) + '&'
 ```
 
-
-
 ##### (3) Merging the GPX files
 
 Now that we have a GPX file for each of the routes were going to be importing this all back into ArcMap. Now I'm going to have to do this literately for each file and collect each route into a single feature layer. For this I created yet another model in Model Builder, this time one that worked as intended.
 
-![](/static/img/capture11.PNG)
+![](/img/capture11.PNG)
 
 The resulting feature overlayed on our map of Kingston layer looks like this.
 
-![](/static/img/Capture12.PNG)
+![](/img/Capture12.PNG)
 
 ArcMaps does not include any sort of image processing functionality. After some more research a better solution for the visualization is going to be QGIS; an open source GIS program. After exporting the routes feature as a shapefile and importing into QGIS, I used the addition blending mode to highlight areas on the map where I had been more frequently. 
 
-![](/static/img/output.png)
+![](/img/output.png)
 
 A full resolution image [here](https://i.imgur.com/DweeyAZ.png)
-
-
 
 ### What I Learned
 
