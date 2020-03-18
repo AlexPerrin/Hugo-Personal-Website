@@ -19,7 +19,7 @@ This summer while travelling I discovered the Google Timeline, a history of your
 
 Google Takeout can be found [here](https://takeout.google.com/settings/takeout ). It takes about 12 hours for Google to process your request until they send your takeout through email. You can download only your location history if you've accumulated a large amount of data. Your location history will be JSON formation
 
-![Capture](static/img/project1/Capture.PNG)
+![Capture](/static/img/Capture.PNG)
 
 
 
@@ -27,17 +27,17 @@ Google Takeout can be found [here](https://takeout.google.com/settings/takeout )
 
 The JSON format of our data seems to be in a format only readable by Google Maps. In order to read your data into ArcGIS it must be converted into shapefiles (.shp). For this I found a python script  on Github called [android_location_converter](https://github.com/iboates/android_location_converter)
 
-![](static/img/project1/Capture2.PNG)Our data is a series of points with a longitude, latitude, and timestamp. For me there was about 1,500,000+ points along Eastern Ontario from Toronto to Montreal, with most of the points being in my hometown Kingston.
+![](/static/img/Capture2.PNG)Our data is a series of points with a longitude, latitude, and timestamp. For me there was about 1,500,000+ points along Eastern Ontario from Toronto to Montreal, with most of the points being in my hometown Kingston.
 
 ### Reducing the Data
 
 So even with my own desktop with a fancy CPU and GPU, this amount of data turned ArcGIS into a slideshow, which gets old very quick while trying to learn to use the software. I decided to reduce the data to only points within Kingston for my sanity. I've also gone ahead and downloaded Shapefiles for the map of Kingston, conveniently provided to the public on the [City of Kingston website](https://opendatakingston.cityofkingston.ca/explore/dataset/road-segments/information/?disjunctive.orn_class&disjunctive.gis_class)
 
-![Capture1](static/img/project1/Capture1.PNG)
+![Capture1](/static/img/Capture1.PNG)
 
 We can see the map of Kingston, our location history, a boundary I created to include only the points within.
 
-![](static/img/project1/Capture4.PNG)
+![](/static/img/Capture4.PNG)
 
 Still over 1,000,000 points but still much better.
 
@@ -47,11 +47,11 @@ Still over 1,000,000 points but still much better.
 
 In an attempt to make a path similar to what is seen in the Google Timeline I decided to connect each point in a line based of off date. This was an absolute mess.
 
-![Capture5](static/img/project1/Capture5.PNG)
+![](/static/img/Capture5.PNG)
 
 The line join feature is unaware of the underlying map layer and joins the points in straight lines. I originally thought this may be due to our GPS not fitting to the roads due inaccuracy so I tried snapping each point to the lines on the map layer
 
-![](static/img/project1/Capture3.PNG)While this did clean up the map a little, the resulting lines were almost identical to the previously generated mess.
+![](/static/img/Capture3.PNG)While this did clean up the map a little, the resulting lines were almost identical to the previously generated mess.
 
 
 
@@ -59,11 +59,11 @@ The line join feature is unaware of the underlying map layer and joins the point
 
 So the version of ArcGIS provided by my school includes all of the licensed ArcGIS plugins including a routing engine found in the Network Analyst plugin. The idea was to create a route for each unique date, in the order of time for each point. First we have to convert out map layer into a Network Model which is a series of edges and nodes or in this case streets and intersections.
 
-![](static/img/project1/Capture8.PNG)
+![](/static/img/Capture8.PNG)
 
 Using the Network analysist plugin I found no way to created routes based off of date or at least not without doing it manually one by one for each of the 1000+ days of routes. My next attempt was to used ArcMaps Model Builder, this tools lets you string together different geoprocessing tools inputs and outputs to automate the processing of data. I tried to do it iteratively for each of the routes.
 
-![](static/img/project1/Capture10.PNG) 
+![](/static/img/Capture10.PNG) 
 
 After spending a day trying to get the model to work I gave up. After doing some research on Reddit a simpler and more powerful option is Python scripting within ArcMaps. You can either control your current ArcMaps session with a python terminal or you can use all of the ArcGIS functionality with their APIs and Python plugin ArcPy.
 
@@ -167,15 +167,15 @@ for i in range(len(coordinates)-1):
 
 Now that we have a GPX file for each of the routes were going to be importing this all back into ArcMap. Now I'm going to have to do this literately for each file and collect each route into a single feature layer. For this I created yet another model in Model Builder, this time one that worked as intended.
 
-![capture11](static/img/project1/capture11.PNG)
+![](/static/img/capture11.PNG)
 
 The resulting feature overlayed on our map of Kingston layer looks like this.
 
-![](static/img/project1/Capture12.PNG)
+![](/static/img/Capture12.PNG)
 
 ArcMaps does not include any sort of image processing functionality. After some more research a better solution for the visualization is going to be QGIS; an open source GIS program. After exporting the routes feature as a shapefile and importing into QGIS, I used the addition blending mode to highlight areas on the map where I had been more frequently. 
 
-![](static/img/project1/output.png)
+![](/static/img/output.png)
 
 A full resolution image [here](https://i.imgur.com/DweeyAZ.png)
 
